@@ -118,3 +118,18 @@ function reanudarMusicaSiCorresponde() {
 
 videoEl?.addEventListener("pause", reanudarMusicaSiCorresponde);
 videoEl?.addEventListener("ended", reanudarMusicaSiCorresponde);
+
+const bgAudio = document.getElementById("bg-audio");
+const audioPrompt = document.getElementById("audio-prompt");
+const btnActivarAudio = document.getElementById("btn-activar-audio");
+
+// Si estamos en cel y le piquen al botón flotante
+btnActivarAudio?.addEventListener("click", () => {
+  if (bgAudio) {
+    bgAudio.play().then(() => {
+      if (audioPrompt) audioPrompt.style.display = "none";
+    }).catch((err) => {
+      console.log("Error al reproducir audio:", err);
+    });
+  }
+});
