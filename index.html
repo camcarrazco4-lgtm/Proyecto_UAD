@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Fanzine surrealista tipo webring, estética de plastilina">
+    <title>WEIRDCORE</title>
+    <link rel="icon" type="image/x-icon" href="img/icon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&family=Creepster&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+  </head>
+  <body>
+    <!-- ============================================================
+         FILTROS SVG
+         ============================================================ -->
+    <svg style="visibility: hidden; position: absolute; width: 0; height: 0;" xmlns="http://www.w3.org/2000/svg" version="1.1">
+      <defs>
+        <filter id="clay-texture" x="-20%" y="-20%" width="140%" height="140%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" seed="7" result="noise" />
+          <feDisplacementMap in="SourceGraphic" in2="noise" scale="10" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+
+        <filter id="clay-texture-strong" x="-40%" y="-40%" width="180%" height="180%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="4" seed="3" result="noise2" />
+          <feDisplacementMap in="SourceGraphic" in2="noise2" scale="22" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+
+        <filter id="chroma-glitch">
+          <feColorMatrix type="matrix"
+            values="1 0 0 0 0
+                    0 1 0 0 0
+                    0 0 1 0 0
+                    0 0 0 1 0" result="base"/>
+          <feOffset in="base" dx="2" dy="0" result="redshift"/>
+          <feColorMatrix in="redshift" type="matrix"
+            values="1 0 0 0 0
+                    0 0 0 0 0
+                    0 0 0 0 0
+                    0 0 0 1 0" result="red"/>
+          <feOffset in="base" dx="-2" dy="0" result="blueshift"/>
+          <feColorMatrix in="blueshift" type="matrix"
+            values="0 0 0 0 0
+                    0 0 0 0 0
+                    0 0 1 0 0
+                    0 0 0 1 0" result="blue"/>
+          <feBlend in="red" in2="blue" mode="screen" result="rb"/>
+          <feBlend in="rb" in2="base" mode="lighten"/>
+        </filter>
+      </defs>
+    </svg>
+
+    <!-- ============================================================
+         CAPAS DE FONDO FIJAS AL VIEWPORT
+         Estas viven FUERA de .page a propósito: si les pusiéramos un
+         filtro (o estuvieran dentro de un ancestro con filtro) dejarían
+         de estar ancladas a la pantalla y se cortarían al hacer scroll.
+         ============================================================ -->
+    <div class="clay-field"></div>
+    <div class="lava-blob lava-blob-1"></div>
+    <div class="lava-blob lava-blob-2"></div>
+    <div class="lava-blob lava-blob-3"></div>
+
+    <!-- Nuevos elementos decorativos: migajas de arcilla flotando -->
+    <div class="crumb crumb-1"></div>
+    <div class="crumb crumb-2"></div>
+    <div class="crumb crumb-3"></div>
+    <div class="crumb crumb-4"></div>
+    <div class="crumb crumb-5"></div>
+
+    <!-- Marco decorativo tipo festón de arcilla arriba y abajo de la pantalla -->
+    <div class="clay-frame clay-frame-top"></div>
+    <div class="clay-frame clay-frame-bottom"></div>
+
+    <!-- Textura de huellas dactilares presionadas en la arcilla -->
+    <div class="fingerprint-overlay"></div>
+
+    <audio id="bg-audio" autoplay loop>
+      <source src="audio/loop-surrealista.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- ============================================================
+         .page: aquí vive la animación de "respiración" de color.
+         Al estar en un div interno (y no en <body>), los elementos
+         fixed de arriba ya no se cortan al hacer scroll.
+         ============================================================ -->
+    <div class="page">
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+
+      <nav id="menu" aria-label="Navegación principal">
+        <div class="logo">ARCILLA <span class="logo-sub">zine</span></div>
+        <ul>
+          <li><a href="#inicio">Portada</a></li>
+          <li><a href="#sobre">Qué es esto</a></li>
+          <li><a href="#numeros">Números</a></li>
+          <li><a href="#galeria">Galería</a></li>
+          <li><a href="#video">Transmisión</a></li>
+          <li><a href="#contacto">Únete</a></li>
+        </ul>
+      </nav>
+
+      <header id="inicio" class="hero">
+        <p class="eyebrow">Nodo #4 del webring — señal encontrada en la arcilla</p>
+        <h1>ARCILLA</h1>
+        <p class="hero-copy">Un fanzine hecho a mano por gente que sueña con texturas raras, colores que no deberían existir juntos y formas que no terminan de asentarse. Bienvenido a un rincón blando de internet.</p>
+        <div class="hero-pills">
+          <span>Hecho a mano</span>
+          <span>Sin algoritmo</span>
+          <span>100% arcilla</span>
+        </div>
+      </header>
+
+      <main>
+        <section id="sobre" class="panel">
+          <h2>Qué es esto</h2>
+          <div class="flex-contenedor">
+            <article class="flex-item">
+              <h3>El zine</h3>
+              <p>Una colección de rarezas visuales y textos cortos que no caben en ningún otro lado. Cada número es una excusa para experimentar con texturas y formas imposibles.</p>
+            </article>
+            <article class="flex-item">
+              <h3>El webring</h3>
+              <p>Este sitio es un nodo dentro de una cadena de páginas hechas por fans de lo extraño. Al final encontrarás los enlaces para saltar al siguiente sitio de la red.</p>
+            </article>
+            <article class="flex-item">
+              <h3>La gente</h3>
+              <p>No hay redacción oficial. Cualquiera que mande algo raro y bien hecho puede aparecer en el próximo número.</p>
+            </article>
+          </div>
+        </section>
+
+        <!-- ============================================================
+             ARCHIVO DE NÚMEROS - ahora es funcional: cada edición es un
+             <details> nativo del navegador, se expande sin JavaScript.
+             ============================================================ -->
+        <section id="numeros" class="panel">
+          <h2>Archivo de números</h2>
+          <div class="numero-lista">
+            <details class="numero-item" open>
+              <summary>
+                <span class="numero-tag">#01</span>
+                <span class="numero-titulo">Texturas que respiran</span>
+                <span class="numero-estado proximo">Próximamente</span>
+              </summary>
+              <p>Todavía en producción. Vamos a intentar imprimirlo antes de que se derrita del todo.</p>
+            </details>
+
+            <details class="numero-item">
+              <summary>
+                <span class="numero-tag">#02</span>
+                <span class="numero-titulo">Colores que no deberían combinar</span>
+                <span class="numero-estado proximo">Próximamente</span>
+              </summary>
+              <p>Todavía en producción. Vamos a intentar imprimirlo antes de que se derrita del todo.</p>
+            </details>
+
+            <details class="numero-item">
+              <summary>
+                <span class="numero-tag">#03</span>
+                <span class="numero-titulo">Formas que no terminan de asentarse</span>
+                <span class="numero-estado proximo">Próximamente</span>
+              </summary>
+              <p>Todavía en producción. Vamos a intentar imprimirlo antes de que se derrita del todo.</p>
+            </details>
+          </div>
+        </section>
+
+        <section id="galeria" class="panel">
+          <h2>Galería de la comunidad</h2>
+          <p class="galeria-hint">Toca cualquier pieza para verla en grande.</p>
+          <div class="flex-contenedor gallery-grid">
+            <figure class="art-card">
+              <div class="art-shape art-shape-a" data-caption="Sin título, arcilla" style="background-image: url('img/1.png'); background-size: cover; background-position: center;"></div>
+              <figcaption>Sin título, arcilla</figcaption>
+            </figure>
+            <figure class="art-card">
+              <div class="art-shape art-shape-b" data-caption="Retrato derretido" style="background-image: url('img/2.png'); background-size: cover; background-position: center;"></div>
+              <figcaption>Retrato derretido</figcaption>
+            </figure>
+            <figure class="art-card">
+              <div class="art-shape art-shape-c" data-caption="Paisaje imposible" style="background-image: url('img/header.png'); background-size: cover; background-position: center;"></div>
+              <figcaption>Paisaje imposible</figcaption>
+            </figure>
+          </div>
+        </section>
+
+        <section id="video" class="panel">
+          <h2>Transmisión</h2>
+          <p>Fragmento recuperado de una señal de video.</p>
+          <div class="video-frame" id="video-frame">
+            <video controls playsinline webkit-playsinline width="100%" id="video-el">
+              <source src="vid/videoplayback.mp4" type="video/mp4">
+              Tu navegador no soporta la reproducción de video.
+            </video>
+          </div>
+        </section>
+
+        <section id="contacto" class="panel">
+          <h2>Únete al zine</h2>
+          <p>Manda algo raro. No hace falta que sea perfecto, solo honesto.</p>
+          <form class="form-contacto">
+            <label for="nombre">Nombre o seudónimo</label>
+            <input type="text" id="nombre" name="nombre" placeholder="¿Cómo te llamamos?">
+
+            <label for="correo">Correo</label>
+            <input type="email" id="correo" name="correo" placeholder="tucorreo@ejemplo.com">
+
+            <label for="mensaje">Qué nos quieres mandar</label>
+            <textarea id="mensaje" name="mensaje" rows="4" placeholder="Cuéntanos tu idea rara..."></textarea>
+
+            <button type="button" class="boton">Enviar señal</button>
+          </form>
+        </section>
+
+        <!-- ============================================================
+             WEBRING FUNCIONAL
+             Los links reales apuntan a índices/webrings de sitios raros
+             que existen de verdad en Neocities, no son inventados.
+             ============================================================ -->
+        <section class="webring" aria-label="Navegación del webring">
+          <p class="webring-label">— parte del webring de fanzines surrealistas —</p>
+          <div class="webring-nav">
+            <a class="webring-link webring-random" id="webring-random" href="https://theuselessweb.com/" target="_blank" rel="noopener">sitio al azar</a>
+            <a class="webring-link" id="webring-list" href="https://neocities.org/browse?tag=webrings" target="_blank" rel="noopener">lista completa</a>
+          </div>
+          <p class="webring-id" id="webring-current">nodo 4 · viendo: Weird Website Lovers Webring</p>
+        </section>
+      </main>
+
+      <footer>
+        <p>ARCILLA fanzine — Proyecto escolar — Páginas Web 6° Cuatrimestre — UAD Campus Alamedas</p>
+      </footer>
+    </div>
+
+    <!-- ============================================================
+         LIGHTBOX DE LA GALERÍA
+         Vive AQUÍ, como hermano de .page y no adentro de main, por la
+         misma razón que las capas de fondo: si quedara dentro de .page
+         (que tiene filter), su position:fixed se ancla al div en vez
+         de a la ventana real, y se ve chico / permite scrollear detrás.
+         ============================================================ -->
+    <div class="lightbox" id="lightbox">
+      <div class="lightbox-shape" id="lightbox-shape"></div>
+      <p class="lightbox-caption" id="lightbox-caption"></p>
+      <button class="lightbox-close" id="lightbox-close" aria-label="Cerrar">cerrar ✕</button>
+    </div>
+
+    <script src="js/main.js"></script>
+  </body>
+</html>

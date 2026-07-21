@@ -1,0 +1,749 @@
+/* ============================================================
+   RESET Y FUENTES
+   ============================================================ */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ============================================================
+   ESTILOS GENERALES - PALETA HYLICS
+   ============================================================ */
+
+body {
+  font-family: 'VT323', monospace;
+  font-size: 22px;
+  background-color: #1b181c;
+  background-image: url('../img/background.png');
+  background-repeat: repeat-y;
+  background-position: center top;
+  background-size: 100% auto;
+  background-attachment: scroll;
+  color: #e6d689;
+  overflow-x: hidden;
+  position: relative;
+  cursor: url('../images/cursor.png'), auto;
+  /* IMPORTANTE: el body ya NO lleva filter/animation aquí.
+     El filtro creaba un "containing block" para los hijos fixed/
+     absolute (clay-field, lava-blobs, migajas), lo que hacía que
+     se cortaran al hacer scroll. Ahora ese filtro vive en .page,
+     que no contiene esos elementos de fondo. */
+}
+
+/* .page envuelve TODO el contenido real (nav, hero, main, footer)
+   pero NO envuelve las capas de fondo fijas al viewport. Por eso
+   puede tener su propio filtro/animación sin romper nada. */
+.page {
+  position: relative;
+  animation: breathe 18s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%, 100% { filter: contrast(1.15) saturate(0.85) sepia(0.10) hue-rotate(-6deg); }
+  50%      { filter: contrast(1.25) saturate(0.75) sepia(0.18) hue-rotate(-14deg); }
+}
+
+/* Dithering + scanlines VHS */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background-image:
+    radial-gradient(#e6d689 1px, transparent 1px),
+    repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.18) 0px,
+      transparent 1px,
+      transparent 3px
+    );
+  background-size: 8px 8px, 100% 3px;
+  opacity: 0.18;
+  z-index: 999;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+}
+
+/* Grano animado encima de todo */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: repeating-conic-gradient(
+    from 0deg,
+    rgba(255,255,255,0.02) 0deg 1deg,
+    transparent 1deg 2deg
+  );
+  z-index: 1000;
+  pointer-events: none;
+  animation: grain 1s steps(4) infinite;
+}
+
+@keyframes grain {
+  0%   { transform: translate(0, 0); }
+  25%  { transform: translate(-1%, 1%); }
+  50%  { transform: translate(1%, -1%); }
+  75%  { transform: translate(-1%, -1%); }
+  100% { transform: translate(0, 0); }
+}
+
+/* ============================================================
+   FONDO DE ARCILLA: "bultos" con luz/sombra simulada
+   ============================================================ */
+.clay-field {
+  position: fixed;
+  inset: 0;
+  z-index: -5;
+  background-image:
+    radial-gradient(circle at 25% 20%, rgba(255,255,255,0.05) 0%, transparent 40%),
+    radial-gradient(circle at 70% 15%, rgba(0,0,0,0.20) 0%, transparent 45%),
+    radial-gradient(circle at 15% 70%, rgba(255,255,255,0.04) 0%, transparent 35%),
+    radial-gradient(circle at 80% 65%, rgba(0,0,0,0.18) 0%, transparent 40%),
+    radial-gradient(circle at 50% 90%, rgba(255,255,255,0.03) 0%, transparent 45%);
+  background-size: 500px 500px, 420px 420px, 600px 600px, 480px 480px, 700px 700px;
+  background-position: center, center, center, center, center;
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat;
+}
+
+.lava-blob {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: 0.22;
+  z-index: -4;
+  pointer-events: none;
+}
+
+.lava-blob-1 {
+  width: 500px; height: 500px;
+  top: -10%; left: -10%;
+  background: radial-gradient(circle, #b75c4c 0%, transparent 70%);
+  animation: lava-float-1 28s ease-in-out infinite;
+}
+
+.lava-blob-2 {
+  width: 600px; height: 600px;
+  bottom: -15%; right: -10%;
+  background: radial-gradient(circle, #5da493 0%, transparent 70%);
+  animation: lava-float-2 34s ease-in-out infinite;
+}
+
+.lava-blob-3 {
+  width: 400px; height: 400px;
+  top: 40%; left: 50%;
+  background: radial-gradient(circle, #e6d689 0%, transparent 70%);
+  animation: lava-float-3 22s ease-in-out infinite;
+}
+
+@keyframes lava-float-1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%      { transform: translate(8%, 12%) scale(1.15); }
+}
+
+@keyframes lava-float-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%      { transform: translate(-10%, -8%) scale(1.1); }
+}
+
+@keyframes lava-float-3 {
+  0%, 100% { transform: translate(-50%, 0) scale(1); }
+  50%      { transform: translate(-40%, -15%) scale(0.9); }
+}
+
+/* ============================================================
+   NUEVO: MIGAJAS DE ARCILLA
+   Trocitos pequeños flotando por la pantalla, fijos al viewport,
+   como si se hubieran desprendido de los blobs grandes.
+   ============================================================ */
+.crumb {
+  position: fixed;
+  border: 2px solid #000;
+  z-index: -3;
+  opacity: 0.5;
+  box-shadow: 3px 3px 0px rgba(0,0,0,0.4);
+  pointer-events: none;
+  animation: crumb-float 9s ease-in-out infinite;
+}
+
+.crumb-1 {
+  width: 22px; height: 18px;
+  top: 15%; left: 40%;
+  background-color: #b75c4c;
+  border-radius: 60% 40% 50% 50% / 40% 60% 40% 60%;
+  animation-duration: 8s;
+}
+.crumb-2 {
+  width: 16px; height: 20px;
+  top: 65%; left: 25%;
+  background-color: #5da493;
+  border-radius: 40% 60% 60% 40% / 60% 40% 60% 40%;
+  animation-duration: 11s;
+  animation-delay: -2s;
+}
+.crumb-3 {
+  width: 26px; height: 22px;
+  top: 30%; right: 20%;
+  background-color: #e6d689;
+  border-radius: 50% 50% 40% 60% / 50% 50% 60% 40%;
+  animation-duration: 10s;
+  animation-delay: -4s;
+}
+.crumb-4 {
+  width: 14px; height: 16px;
+  top: 80%; right: 35%;
+  background-color: #b75c4c;
+  border-radius: 60% 40% 60% 40% / 40% 60% 40% 60%;
+  animation-duration: 9s;
+  animation-delay: -1s;
+}
+.crumb-5 {
+  width: 20px; height: 18px;
+  top: 50%; left: 8%;
+  background-color: #5da493;
+  border-radius: 45% 55% 55% 45% / 55% 45% 55% 45%;
+  animation-duration: 12s;
+  animation-delay: -6s;
+}
+
+@keyframes crumb-float {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  50%      { transform: translate(6px, -10px) rotate(20deg); }
+}
+
+/* ============================================================
+   NUEVO: MARCO DE ARCILLA (festón arriba/abajo del viewport)
+   Una tira de bultos redondeados que enmarca la pantalla, como
+   si el borde del monitor estuviera hecho de plastilina.
+   ============================================================ */
+.clay-frame {
+  position: fixed;
+  left: 0;
+  width: 100%;
+  height: 14px;
+  z-index: 998;
+  pointer-events: none;
+  background-image: radial-gradient(circle, #382c31 45%, transparent 48%);
+  background-size: 30px 30px;
+  background-repeat: repeat-x;
+  opacity: 0.9;
+}
+
+.clay-frame-top {
+  top: 0;
+  background-position: 0 -8px;
+  box-shadow: 0 3px 0 rgba(0,0,0,0.4);
+}
+
+.clay-frame-bottom {
+  bottom: 0;
+  background-position: 0 8px;
+  box-shadow: 0 -3px 0 rgba(0,0,0,0.4);
+}
+
+/* ============================================================
+   NUEVO: TEXTURA DE HUELLAS DACTILARES
+   Simula dedos presionados en la arcilla al fondo de todo.
+   ============================================================ */
+.fingerprint-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  opacity: 0.06;
+  background-image:
+    repeating-radial-gradient(circle at 10% 20%, #000 0px, transparent 2px, transparent 6px),
+    repeating-radial-gradient(circle at 80% 60%, #000 0px, transparent 2px, transparent 7px),
+    repeating-radial-gradient(circle at 40% 85%, #000 0px, transparent 2px, transparent 5px);
+  background-size: 140px 140px, 160px 160px, 130px 130px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page, .lava-blob, .orb, .art-shape, .crumb, body::after {
+    animation: none !important;
+  }
+}
+
+h1, h2, h3, .logo {
+  font-family: 'Creepster', cursive;
+  color: #5da493;
+  text-shadow: 4px 4px 0px #000;
+  letter-spacing: 2px;
+}
+
+.panel h2 { transform: rotate(-1.5deg); display: inline-block; }
+.panel:nth-of-type(even) h2 { transform: rotate(1deg); }
+.panel:nth-of-type(3n) h2 { transform: rotate(-0.5deg); }
+
+/* ============================================================
+   NAVEGACIÓN
+   ============================================================ */
+#menu {
+  background-color: #382c31;
+  border: 4px solid #b75c4c;
+  border-radius: 60% 40% 70% 30% / 40% 50% 60% 50%;
+  padding: 15px 30px;
+  width: 90%;
+  margin: 20px auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 6px 6px 0px #000;
+  filter: url(#clay-texture);
+}
+
+#menu .logo {
+  font-size: 32px;
+  color: #e6d689;
+}
+
+.logo-sub {
+  font-size: 18px;
+  color: #b75c4c;
+  vertical-align: middle;
+  margin-left: 4px;
+}
+
+#menu ul {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+}
+
+#menu a {
+  text-decoration: none;
+  color: #5da493;
+  font-size: 24px;
+  transition: color 0.1s;
+}
+
+#menu a:hover {
+  color: #b75c4c;
+}
+
+/* ============================================================
+   ELEMENTOS FLOTANTES DE ARCILLA (.orb)
+   ============================================================ */
+.orb {
+  position: absolute;
+  border: 3px solid #000;
+  box-shadow: inset -10px -10px 0px rgba(0,0,0,0.5), 8px 8px 0px #000;
+  z-index: -1;
+  filter: url(#clay-texture-strong);
+  animation: wobble 7s ease-in-out infinite, drift 12s ease-in-out infinite;
+}
+
+.orb-1 {
+  width: 150px;
+  height: 120px;
+  background-color: #b75c4c;
+  top: 10%;
+  left: 5%;
+  border-radius: 40% 70% 50% 40% / 50% 40% 70% 50%;
+}
+
+.orb-2 {
+  width: 90px;
+  height: 110px;
+  background-color: #5da493;
+  top: 40%;
+  right: 10%;
+  border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  animation-delay: -3s, -5s;
+}
+
+@keyframes wobble {
+  0%, 100% { border-radius: 60% 40% 70% 30% / 40% 50% 60% 50%; }
+  50%      { border-radius: 40% 60% 30% 70% / 60% 30% 50% 40%; }
+}
+
+@keyframes drift {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  50%      { transform: translate(10px, -14px) rotate(4deg); }
+}
+
+/* ============================================================
+   HERO / ENCABEZADO
+   ============================================================ */
+.hero {
+  text-align: center;
+  padding: 60px 20px;
+  margin: 40px auto;
+  max-width: 800px;
+}
+
+.hero h1 {
+  font-size: 60px;
+  color: #e6d689;
+  margin: 10px 0;
+  text-shadow:
+    4px 4px 0px #000,
+    -2px 0px 0px rgba(183, 92, 76, 0.6),
+    2px 0px 0px rgba(93, 164, 147, 0.6);
+}
+
+.eyebrow {
+  color: #b75c4c;
+  font-size: 28px;
+}
+
+.hero-copy {
+  font-size: 26px;
+  margin-bottom: 30px;
+}
+
+.hero-pills {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.hero-pills span {
+  background-color: #5da493;
+  color: #1b181c;
+  padding: 5px 20px;
+  border: 3px solid #000;
+  border-radius: 50% 40% 60% 30% / 40% 60% 40% 50%;
+  font-family: 'Creepster', cursive;
+  font-size: 24px;
+  box-shadow: 4px 4px 0px #000;
+  display: inline-block;
+}
+
+.hero-pills span:nth-child(1) { transform: rotate(-4deg); }
+.hero-pills span:nth-child(2) { transform: rotate(3deg); }
+.hero-pills span:nth-child(3) { transform: rotate(-2deg); }
+
+/* ============================================================
+   PANELES (Secciones) - Bloques de plastilina
+   ============================================================ */
+.panel {
+  background-color: #382c31;
+  width: 85%;
+  margin: 40px auto;
+  padding: 40px;
+  border: 5px solid #000;
+  border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+  box-shadow:
+    inset -15px -15px 0px rgba(0,0,0,0.4),
+    10px 10px 0px #000;
+  filter: url(#clay-texture);
+}
+
+/* ============================================================
+   FLEX CONTAINERS Y ART CARDS
+   ============================================================ */
+.flex-contenedor {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.flex-item {
+  background-color: #1b181c;
+  padding: 20px;
+  width: 30%;
+  min-width: 250px;
+  border: 3px solid #5da493;
+  border-radius: 10px 40px 10px 40px;
+  box-shadow: 5px 5px 0px #000;
+}
+
+.flex-item:nth-child(odd) { transform: rotate(-1deg); }
+.flex-item:nth-child(even) { transform: rotate(1deg); }
+
+.art-card {
+  text-align: center;
+}
+
+.art-shape {
+  width: 150px;
+  height: 150px;
+  margin: 0 auto 15px auto;
+  border: 4px solid #000;
+  box-shadow: inset -10px -10px 0px rgba(0,0,0,0.6), 6px 6px 0px #000;
+  animation: wobble 8s ease-in-out infinite;
+  cursor: url('../images/cursor.png'), pointer;
+}
+
+.art-shape-a { background-color: #e6d689; border-radius: 60% 40% 70% 30% / 40% 50% 60% 50%; }
+.art-shape-b { background-color: #b75c4c; border-radius: 30% 70% 40% 60% / 50% 30% 70% 40%; animation-delay: -2.5s; }
+.art-shape-c { background-color: #5da493; border-radius: 50% 50% 30% 70% / 60% 40% 40% 60%; animation-delay: -5s; }
+
+figcaption {
+  font-family: 'Creepster', cursive;
+  color: #b75c4c;
+  font-size: 24px;
+}
+
+.galeria-hint {
+  font-size: 18px;
+  color: #e6d689;
+  opacity: 0.7;
+  margin-bottom: 20px;
+}
+
+/* Lightbox de la galería */
+.lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background-color: rgba(0,0,0,0.85);
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.lightbox.is-open {
+  display: flex;
+}
+
+.lightbox-shape {
+  width: min(88vw, 900px);
+  height: min(76vh, 720px);
+  border: 6px solid #000;
+  box-shadow: inset -15px -15px 0px rgba(0,0,0,0.6), 10px 10px 0px #000;
+  animation: wobble 8s ease-in-out infinite;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-color: #141015;
+}
+
+.lightbox-shape.lightbox-shape-fill {
+  background-size: cover;
+}
+
+.lightbox-caption {
+  font-family: 'Creepster', cursive;
+  color: #e6d689;
+  font-size: 28px;
+}
+
+.lightbox-close {
+  background-color: #b75c4c;
+  color: #1b181c;
+  font-family: 'VT323', monospace;
+  font-size: 20px;
+  border: 3px solid #000;
+  border-radius: 10px 30px 10px 30px;
+  padding: 8px 20px;
+  cursor: pointer;
+}
+
+/* ============================================================
+   TABLA, FORMULARIOS Y VIDEO
+   ============================================================ */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #1b181c;
+  border: 4px solid #000;
+}
+
+th, td {
+  padding: 15px;
+  border: 2px solid #5da493;
+  text-align: center;
+}
+
+th {
+  background-color: #b75c4c;
+  color: #1b181c;
+  font-family: 'Creepster', cursive;
+  font-size: 24px;
+}
+
+/* Archivo de números como acordeón <details> */
+.numero-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.numero-item {
+  background-color: #1b181c;
+  border: 3px solid #5da493;
+  border-radius: 15px 5px 15px 5px;
+  padding: 15px 20px;
+}
+
+.numero-item summary {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+  list-style: none;
+}
+
+.numero-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.numero-item summary::before {
+  content: "▶";
+  color: #b75c4c;
+  font-size: 16px;
+  transition: transform 0.2s;
+}
+
+.numero-item[open] summary::before {
+  transform: rotate(90deg);
+}
+
+.numero-tag {
+  font-family: 'Creepster', cursive;
+  color: #b75c4c;
+  font-size: 22px;
+}
+
+.numero-titulo {
+  flex: 1;
+  font-size: 22px;
+}
+
+.numero-estado {
+  font-size: 16px;
+  padding: 3px 12px;
+  border-radius: 10px;
+  border: 2px solid #000;
+}
+
+.numero-estado.disponible {
+  background-color: #5da493;
+  color: #1b181c;
+}
+
+.numero-estado.proximo {
+  background-color: #382c31;
+  color: #e6d689;
+}
+
+.numero-item p {
+  margin-top: 12px;
+  font-size: 20px;
+  color: #e6d689;
+  opacity: 0.85;
+}
+
+input, textarea {
+  background-color: #1b181c;
+  border: 4px solid #b75c4c;
+  padding: 15px;
+  color: #e6d689;
+  font-family: 'VT323', monospace;
+  font-size: 20px;
+  border-radius: 15px 5px 25px 5px;
+  box-shadow: inset 4px 4px 0px rgba(0,0,0,0.8);
+}
+
+input:focus, textarea:focus {
+  outline: none;
+  border-color: #5da493;
+}
+
+.boton {
+  background-color: #5da493;
+  color: #1b181c;
+  font-family: 'Creepster', cursive;
+  font-size: 30px;
+  padding: 10px;
+  border: 4px solid #000;
+  border-radius: 40% 60% 50% 40% / 50% 40% 60% 50%;
+  cursor: pointer;
+  box-shadow: 6px 6px 0px #000;
+  transition: transform 0.15s;
+}
+
+.boton:hover {
+  background-color: #e6d689;
+  transform: scale(1.05) rotate(-2deg);
+}
+
+.video-frame {
+  position: relative;
+}
+
+.video-frame video {
+  border: 8px solid #b75c4c;
+  border-radius: 40% 10% 40% 10%;
+  box-shadow: 10px 10px 0px #000;
+  filter: saturate(0.85) contrast(1.1);
+}
+
+/* ============================================================
+   WEBRING
+   ============================================================ */
+.webring {
+  text-align: center;
+  width: 70%;
+  margin: 50px auto;
+  padding: 25px;
+  border: 3px dashed #5da493;
+  border-radius: 20px;
+  background-color: rgba(56, 44, 49, 0.5);
+}
+
+.webring-label {
+  font-family: 'Creepster', cursive;
+  color: #b75c4c;
+  font-size: 20px;
+  margin-bottom: 15px;
+  letter-spacing: 1px;
+}
+
+.webring-nav {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.webring-link {
+  color: #e6d689;
+  text-decoration: none;
+  font-size: 22px;
+  font-family: 'VT323', monospace;
+  background: transparent;
+  border: 2px solid #5da493;
+  padding: 6px 16px;
+  border-radius: 8px 20px 8px 20px;
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.webring-link:hover {
+  background-color: #5da493;
+  color: #1b181c;
+}
+
+.webring-random {
+  border-color: #b75c4c;
+}
+
+.webring-id {
+  margin-top: 15px;
+  font-size: 16px;
+  color: #5da493;
+  opacity: 0.7;
+}
+
+footer {
+  text-align: center;
+  padding: 30px;
+  color: #5da493;
+  background: transparent;
+  border-top: 2px dashed rgba(230, 214, 137, 0.45);
+  box-shadow: none;
+  margin-top: 50px;
+}
+
+img {
+  filter: contrast(1.8) saturate(0.6) sepia(0.5) hue-rotate(-15deg);
+  border-radius: 40% 60% 50% 40% / 50% 40% 60% 50%;
+  border: 4px solid #000;
+  box-shadow: 6px 6px 0px #000;
+}
