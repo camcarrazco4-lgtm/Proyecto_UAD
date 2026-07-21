@@ -34,6 +34,9 @@ document.getElementById("webring-next")?.addEventListener("click", () => irASiti
 // ============================================================
 // LIGHTBOX DE LA GALERÍA
 // ============================================================
+// ============================================================
+// LIGHTBOX DE LA GALERÍA
+// ============================================================
 const lightbox = document.getElementById("lightbox");
 const lightboxShape = document.getElementById("lightbox-shape");
 const lightboxCaption = document.getElementById("lightbox-caption");
@@ -43,12 +46,10 @@ document.querySelectorAll(".art-shape").forEach((shape) => {
   shape.addEventListener("click", () => {
     const style = window.getComputedStyle(shape);
     const bgImage = style.backgroundImage;
-    const isFirstShape = shape.classList.contains("art-shape-a");
 
-    lightboxShape.className = "lightbox-shape";
-    if (isFirstShape) {
-      lightboxShape.classList.add("lightbox-shape-fill");
-    }
+    // Todas las imágenes ahora llevan la clase fill por defecto
+    lightboxShape.className = "lightbox-shape lightbox-shape-fill";
+    
     lightboxShape.style.backgroundImage = bgImage;
     lightboxCaption.textContent = shape.dataset.caption || "";
     lightbox.classList.add("is-open");
