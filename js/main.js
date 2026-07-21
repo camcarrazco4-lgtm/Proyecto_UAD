@@ -120,19 +120,14 @@ videoEl?.addEventListener("pause", reanudarMusicaSiCorresponde);
 videoEl?.addEventListener("ended", reanudarMusicaSiCorresponde);
 
 const bgAudio = document.getElementById("bg-audio");
-const audioPrompt = document.getElementById("audio-prompt");
 const btnActivarAudio = document.getElementById("btn-activar-audio");
 
-btnActivarAudio?.addEventListener("click", () => {
+btnActivarAudio?.addEventListener("click", (e) => {
   if (bgAudio) {
     bgAudio.play().then(() => {
-      // Opción 1: Lo borra por completo del HTML al hacer clic
-      audioPrompt?.remove();
-      
-      // (O si prefieres que se desvanezca suavemente con CSS, 
-      // borra la línea de arriba y descomenta las dos de abajo):
-      // audioPrompt.style.opacity = "0";
-      // setTimeout(() => audioPrompt.style.display = "none", 300);
+      // Borra la caja flotante completa subiendo desde el botón
+      const promptBox = e.target.closest(".audio-prompt-box");
+      promptBox?.remove();
       
     }).catch((err) => {
       console.log("Error al reproducir audio:", err);
