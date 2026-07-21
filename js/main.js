@@ -125,11 +125,18 @@ const btnActivarAudio = document.getElementById("btn-activar-audio");
 
 btnActivarAudio?.addEventListener("click", () => {
   if (bgAudio) {
+    // 1. PRIMERO: Cambiamos el color a verde brillante de golpe para confirmar que SÍ leyó el clic
+    if (audioPrompt) {
+      audioPrompt.style.backgroundColor = "#5da493";
+      audioPrompt.style.borderColor = "#e6d689";
+    }
+
     bgAudio.play().then(() => {
-      // Ocultado por fuerza bruta
-      if (audioPrompt) {
-        audioPrompt.style.display = "none";
-      }
+      // 2. SEGUNDO: Destruimos la caja por completo un segundo después (o puedes cambiarlo a .remove() directo)
+      setTimeout(() => {
+        audioPrompt?.remove();
+      }, 300); // 300 milisegundos de gracia para que alcances a ver el cambio de color
+      
     }).catch((err) => {
       console.log("Error al reproducir audio:", err);
     });
