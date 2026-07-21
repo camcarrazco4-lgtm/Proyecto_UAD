@@ -790,3 +790,38 @@ img {
     height: 50vh;
   }
 }
+
+/* ============================================================
+   CORRECCIÓN RESPONSIVO - FORMULARIO DE CONTACTO
+   ============================================================ */
+@media (max-width: 768px) {
+  
+  /* Asegura que la sección de contacto no rebase los bordes */
+  #contacto {
+    width: 95% !important;
+    padding: 20px 15px !important;
+  }
+
+  /* Hace que el contenedor del formulario ocupe todo el ancho disponible */
+  .form-contacto {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+  }
+
+  /* Obliga a los campos de texto e inputs a adaptarse al ancho de la pantalla */
+  .form-contacto input,
+  .form-contacto textarea {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+    font-size: 18px !important; /* Letra un poco más chica para evitar desbordes */
+  }
+
+  /* Centra y ajusta el botón de enviar para que no quede volando */
+  .form-contacto .boton {
+    width: 100% !important;
+    font-size: 24px !important;
+    text-align: center;
+  }
+}
