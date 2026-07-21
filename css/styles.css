@@ -508,7 +508,7 @@ figcaption {
   animation: wobble 8s ease-in-out infinite;
   background-position: center;
   background-repeat: no-repeat;
-  background-size: contain;
+  background-size: cover;
   background-color: #141015;
 }
 
