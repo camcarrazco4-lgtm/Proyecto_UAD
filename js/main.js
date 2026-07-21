@@ -120,15 +120,16 @@ videoEl?.addEventListener("pause", reanudarMusicaSiCorresponde);
 videoEl?.addEventListener("ended", reanudarMusicaSiCorresponde);
 
 const bgAudio = document.getElementById("bg-audio");
+const audioPrompt = document.getElementById("audio-prompt");
 const btnActivarAudio = document.getElementById("btn-activar-audio");
 
-btnActivarAudio?.addEventListener("click", (e) => {
+btnActivarAudio?.addEventListener("click", () => {
   if (bgAudio) {
     bgAudio.play().then(() => {
-      // Borra la caja flotante completa subiendo desde el botón
-      const promptBox = e.target.closest(".audio-prompt-box");
-      promptBox?.remove();
-      
+      // Ocultado por fuerza bruta
+      if (audioPrompt) {
+        audioPrompt.style.display = "none";
+      }
     }).catch((err) => {
       console.log("Error al reproducir audio:", err);
     });
